@@ -63,7 +63,7 @@ class RegisterView(APIView):
                     }
                     return Response(data, status=status.HTTP_201_CREATED)
                 return Response(
-                    {"success": False},
+                    {"success": False, "error": serializer.errors},
                     status=status.HTTP_401_UNAUTHORIZED
                 )
             else:
@@ -71,15 +71,15 @@ class RegisterView(APIView):
                     return render(
                         request,
                         'accounts/error.html',
-                        {"error": serializer.user_check.message}
+                        {"error": serializer.errors}
                     )
                 return Response(
-                    {"success": False, "msg": serializer.user_check.message},
+                    {"success": False, "error": serializer.errors},
                     status=status.HTTP_400_BAD_REQUEST
                 )
         except Exception as e:
             return Response(
-                {"success": False, "msg": e},
+                {"success": False, "error": e},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -123,7 +123,7 @@ class LoginView(APIView):
                 return redirect('login')
         else:
             return Response(
-                {'msg': 'Email or Password not correct.'},
+                {'error': 'Email or Password not correct.'},
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
