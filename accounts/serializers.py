@@ -15,7 +15,23 @@ class TokenSerializer(serializers.Serializer):
     success = serializers.BooleanField(default=False)
 
 
+# Custom Validator for password.
+def password_validate(password):
+    """
+    Validate Password.
+    """
+    if not password:
+        raise serializers.ValidationError(
+            {'password': 'Password cannot be empty!'}
+        )
+    elif len(password) < 8:
+        raise serializers.ValidationError(
+            {'password': 'Password too short.'}
+        )
+
+
 class UserSerializer(serializers.ModelSerializer):
+
     user_check = UniqueValidator(
         queryset=User.objects.all(),
         message='Email already exists'
@@ -32,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     password = serializers.CharField(
         min_length=8,
+        validators=[password_validate],
         style={'input_type': 'password', 'placeholder': 'password',
                'autofocus': True}
     )
@@ -56,6 +73,7 @@ class LoginSerializer(serializers.Serializer):
     )
     password = serializers.CharField(
         max_length=100,
+        validators=[password_validate],
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
     remember_me = serializers.BooleanField()
