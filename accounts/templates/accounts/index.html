@@ -1,0 +1,12 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<h1> It Works </h1>
+<p>
+	{% if user.is_authenticated %}
+		<p>authenticated</p>
+	{% else %}
+		<p>Not Authenticated<p>
+	{% endif %}
+</p>

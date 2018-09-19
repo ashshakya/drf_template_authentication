@@ -1,0 +1,11 @@
+{% load rest_framework %}
+<h2>Error</h2>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<p>
+	{{error}}
+</p>
+
+<a href="{% url 'register' %}">Register</a>
