@@ -62,10 +62,6 @@ class RegisterView(APIView):
                         'success': True
                     }
                     return Response(data, status=status.HTTP_201_CREATED)
-                return Response(
-                    {"success": False, "error": serializer.errors},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
             else:
                 if request.accepted_renderer.format == 'html':
                     return render(
@@ -97,8 +93,11 @@ class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
-        serializer = LoginSerializer()
-        return Response({'serializer': serializer})
+        if request.accepted_renderer.format == 'html':
+            serializer = LoginSerializer()
+            return Response({'serializer': serializer})
+        return Response({'success': False},
+                        status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def post(self, request, format='json'):
         email = request.data.get("email", "")
